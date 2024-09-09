@@ -1,7 +1,7 @@
  #!/bin/sh
 
 # To set up AZD environment variabless
-# for use with ACA load balancer https://github.com/Azure-Samples/openai-aca-lb
+# for use with ACA load balancer https://github.com/contica-hakan-akerblom/openai-aca-lb
 
 # Fill in your resource group name and container app name:
 resourceGroupName="your-resource-group-name"
