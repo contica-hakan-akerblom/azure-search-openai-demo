@@ -29,7 +29,7 @@
                         "role": "assistant"
                     },
                     {
-                        "content": "What happens in a performance review?",
+                        "content": "Vad gör sponsor action i Ark Nova?",
                         "role": "user"
                     },
                     {
@@ -91,7 +91,7 @@
                         "role": "system"
                     },
                     {
-                        "content": "What happens in a performance review?",
+                        "content": "Vad gör sponsor action i Ark Nova?",
                         "role": "user"
                     },
                     {
