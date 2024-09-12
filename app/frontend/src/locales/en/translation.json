@@ -22,7 +22,7 @@
     "developerSettings": "Developer settings",
 
     "chatEmptyStateTitle": "Chat with your data",
-    "chatEmptyStateSubtitle": "Ask anything or try an example",
+    "chatEmptyStateSubtitle": "Ask anything or try an example. Avaliable datasets: Rulebook for Ark Nova; Conticas Branching strategy, CI/CD and naming conventions.",
     "defaultExamples": {
         "1": "Sammanfatta Conticas branchingstrategi",
         "2": "Vad gör sponsor action i Ark Nova?",
