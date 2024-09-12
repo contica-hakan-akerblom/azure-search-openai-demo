@@ -38,6 +38,7 @@
 .chatEmptyStateSubtitle {
     font-weight: 600;
     margin-bottom: 0.625rem;
+    white-space: pre-wrap;
 }
 
 .chatMessageStream {
