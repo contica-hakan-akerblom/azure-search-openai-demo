@@ -17,11 +17,26 @@ WORKDIR /app
 # Copy your project files (if any)
 COPY . .
 
+# Ensure the script is executable
+RUN chmod +x ./scripts/prepdocs.sh
+
+# Ensure the logs directory exists
+RUN mkdir -p /mnt/fileshare/logs
+
+# Ensure correct permission
+RUN chown -R vscode:vscode /mnt/fileshare/logs
+
 # Install any dependencies (if you have a requirements.txt for Python)
 RUN pip install --no-cache-dir -r requirements.txt
+
+# Log successful build
+RUN echo "Docker image built successfully" > /mnt/fileshare/logs/prepdocs.log
 
 # Expose the port you specified in forwardPorts
 EXPOSE 50505
 
 # Set the default user
 USER vscode
+
+# Set the default command to run the script
+CMD ["./scripts/prepdocs.sh"]
