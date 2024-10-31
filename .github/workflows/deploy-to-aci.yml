@@ -16,9 +16,12 @@ jobs:
       - name: Log in to Azure CLI with Managed Identity
         env:
           AZURE_CLIENT_ID: ${{ secrets.MANAGED_IDENTITY_CLIENT_ID }}
-          AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
         run: |
-          az login --identity --username $AZURE_CLIENT_ID --subscription $AZURE_SUBSCRIPTION_ID
+          az login --identity --username $AZURE_CLIENT_ID
+          
+      - name: Set Azure Subscription
+        run: |
+          az account set --subscription ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
       - name: Log in to Azure Container Registry
         run: |
