@@ -75,3 +75,4 @@ jobs:
       - name: Monitor Deployment
         run: |
           az container show --resource-group ${{ secrets.RESOURCE_GROUP }} --name ${{ secrets.ACI_NAME }} --output table
+
