@@ -17,7 +17,7 @@ jobs:
         env:
           AZURE_CLIENT_ID: ${{ secrets.MANAGED_IDENTITY_CLIENT_ID }}
         run: |
-          az login --identity --username $AZURE_CLIENT_ID
+          az login --identity
           
       - name: Set Azure Subscription
         run: |
