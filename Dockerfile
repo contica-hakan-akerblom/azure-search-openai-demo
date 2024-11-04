@@ -8,8 +8,6 @@ RUN apt-get update && apt-get install -y \
     && apt-get install -y nodejs \
     && npm install -g azure-cli
 
-# Install Azure Dev CLI
-RUN curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
 
 # Set working directory
 WORKDIR /app
