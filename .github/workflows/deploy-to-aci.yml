@@ -1,78 +1,78 @@
-name: Build and Deploy to Azure Container Instance with Managed Identity
+# name: Build and Deploy to Azure Container Instance with Managed Identity
 
-on:
-  push:
-    branches:
-      - main  # Triggers on push to main branch; adjust as needed
+# on:
+#   push:
+#     branches:
+#       - main  # Triggers on push to main branch; adjust as needed
 
-permissions:
-  id-token: write # Required for OIDC authentication
-  contents: read
+# permissions:
+#   id-token: write # Required for OIDC authentication
+#   contents: read
 
-jobs:
-  build_and_deploy:
-    runs-on: ubuntu-latest
+# jobs:
+#   build_and_deploy:
+#     runs-on: ubuntu-latest
 
-    steps:
-      - name: Check out the code
-        uses: actions/checkout@v3
+#     steps:
+#       - name: Check out the code
+#         uses: actions/checkout@v3
 
-      - name: Configure Azure Authentication Environment Variables
-        env:
-          AZURE_CLIENT_ID: ${{ secrets.MANAGED_IDENTITY_CLIENT_ID }}
-          AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-          AZURE_TENANT_ID: ${{ secrets.MANAGED_IDENTITY_TENANT_ID }}
-        run: |
-          echo "Configured Azure Authentication Environment Variables"
+#       - name: Configure Azure Authentication Environment Variables
+#         env:
+#           AZURE_CLIENT_ID: ${{ secrets.MANAGED_IDENTITY_CLIENT_ID }}
+#           AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+#           AZURE_TENANT_ID: ${{ secrets.MANAGED_IDENTITY_TENANT_ID }}
+#         run: |
+#           echo "Configured Azure Authentication Environment Variables"
 
-      - name: Set Azure Subscription Context
-        run: |
-          az account set --subscription ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+#       - name: Set Azure Subscription Context
+#         run: |
+#           az account set --subscription ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-      - name: Log in to Azure CLI with Managed Identity
-        env:
-          AZURE_CLIENT_ID: ${{ secrets.MANAGED_IDENTITY_CLIENT_ID }}
-        run: |
-          az login --identity -u $AZURE_CLIENT_ID
+#       - name: Log in to Azure CLI with Managed Identity
+#         env:
+#           AZURE_CLIENT_ID: ${{ secrets.MANAGED_IDENTITY_CLIENT_ID }}
+#         run: |
+#           az login --identity -u $AZURE_CLIENT_ID
           
-      - name: Set Azure Subscription
-        run: |
-          az account set --subscription ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+#       - name: Set Azure Subscription
+#         run: |
+#           az account set --subscription ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-      - name: Log in to Azure Container Registry
-        run: |
-          az acr login --name ${{ secrets.ACR_NAME }}
+#       - name: Log in to Azure Container Registry
+#         run: |
+#           az acr login --name ${{ secrets.ACR_NAME }}
 
-      - name: Build and Tag Docker Image
-        run: |
-          docker build -t ${{ secrets.ACR_LOGIN_SERVER }}/myapp:${{ github.sha }} .
-          docker tag ${{ secrets.ACR_LOGIN_SERVER }}/myapp:${{ github.sha }} ${{ secrets.ACR_LOGIN_SERVER }}/myapp:latest
+#       - name: Build and Tag Docker Image
+#         run: |
+#           docker build -t ${{ secrets.ACR_LOGIN_SERVER }}/myapp:${{ github.sha }} .
+#           docker tag ${{ secrets.ACR_LOGIN_SERVER }}/myapp:${{ github.sha }} ${{ secrets.ACR_LOGIN_SERVER }}/myapp:latest
 
-      - name: Push Docker Image to ACR
-        run: |
-          docker push ${{ secrets.ACR_LOGIN_SERVER }}/myapp:${{ github.sha }}
-          docker push ${{ secrets.ACR_LOGIN_SERVER }}/myapp:latest
+#       - name: Push Docker Image to ACR
+#         run: |
+#           docker push ${{ secrets.ACR_LOGIN_SERVER }}/myapp:${{ github.sha }}
+#           docker push ${{ secrets.ACR_LOGIN_SERVER }}/myapp:latest
 
-      - name: Deploy to Azure Container Instance using Managed Identity
-        env:
-          AZURE_CLIENT_ID: ${{ secrets.MANAGED_IDENTITY_CLIENT_ID }}
-        run: |
-          az container create \
-            --resource-group ${{ secrets.RESOURCE_GROUP }} \
-            --name ${{ secrets.ACI_NAME }} \
-            --image ${{ secrets.ACR_LOGIN_SERVER }}/myapp:latest \
-            --cpu 1 \
-            --memory 1.5 \
-            --registry-login-server ${{ secrets.ACR_LOGIN_SERVER }} \
-            --assign-identity $AZURE_CLIENT_ID \
-            --ports 50505 \
-            --azure-file-volume-share-name container-storage \
-            --azure-file-volume-account-name ${{ secrets.STORAGE_ACCOUNT_NAME }} \
-            --azure-file-volume-account-key ${{ secrets.STORAGE_ACCOUNT_KEY }} \
-            --azure-file-volume-mount-path /mnt/fileshare \
-            --restart-policy Always
+#       - name: Deploy to Azure Container Instance using Managed Identity
+#         env:
+#           AZURE_CLIENT_ID: ${{ secrets.MANAGED_IDENTITY_CLIENT_ID }}
+#         run: |
+#           az container create \
+#             --resource-group ${{ secrets.RESOURCE_GROUP }} \
+#             --name ${{ secrets.ACI_NAME }} \
+#             --image ${{ secrets.ACR_LOGIN_SERVER }}/myapp:latest \
+#             --cpu 1 \
+#             --memory 1.5 \
+#             --registry-login-server ${{ secrets.ACR_LOGIN_SERVER }} \
+#             --assign-identity $AZURE_CLIENT_ID \
+#             --ports 50505 \
+#             --azure-file-volume-share-name container-storage \
+#             --azure-file-volume-account-name ${{ secrets.STORAGE_ACCOUNT_NAME }} \
+#             --azure-file-volume-account-key ${{ secrets.STORAGE_ACCOUNT_KEY }} \
+#             --azure-file-volume-mount-path /mnt/fileshare \
+#             --restart-policy Always
 
-      - name: Monitor Deployment
-        run: |
-          az container show --resource-group ${{ secrets.RESOURCE_GROUP }} --name ${{ secrets.ACI_NAME }} --output table
+#       - name: Monitor Deployment
+#         run: |
+#           az container show --resource-group ${{ secrets.RESOURCE_GROUP }} --name ${{ secrets.ACI_NAME }} --output table
 
