@@ -1,6 +1,6 @@
 FROM python:3.11-bullseye
 
-WORKDIR /appcreate_appcontain
+WORKDIR /app
 
 COPY ./ /app
 
