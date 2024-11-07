@@ -4,8 +4,8 @@ name: azure-search-openai-demo
 metadata:
   template: azure-search-openai-demo@0.0.2-beta
 services:
-  backend:
-    project: ./app/backend
+  webapp:
+    project: ./
     language: py
     # Please check docs/azure_container_apps.md for more information on how to deploy to Azure Container Apps
     host: containerapp
@@ -17,24 +17,24 @@ services:
       prepackage:
         windows:
           shell: pwsh
-          run:  cd ../frontend;npm install;npm run build
+          run:  cd app/frontend;npm install;npm run build
           interactive: false
           continueOnError: false
         posix:
           shell: sh
-          run:  cd ../frontend;npm install;npm run build
+          run:  cd app/frontend;npm install;npm run build
           interactive: false
           continueOnError: false
       # This hook is called when Azure Container Apps is the host
       prebuild:
         windows:
           shell: pwsh
-          run:  cd ../frontend;npm install;npm run build
+          run:  cd app/frontend;npm install;npm run build
           interactive: false
           continueOnError: false
         posix:
           shell: sh
-          run:  cd ../frontend;npm install;npm run build
+          run:  cd app/frontend;npm install;npm run build
           interactive: false
           continueOnError: false
 pipeline:
