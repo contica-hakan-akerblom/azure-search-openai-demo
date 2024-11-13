@@ -19,7 +19,7 @@ module main 'main.bicep' = {
     documentIntelligenceSkuName: 'S0'
     openAiHost: 'azure'
     openAiResourceGroupLocation: location
-    searchIndexName: 'gptkbindex'
+    searchIndexName: 'las-test-stateful'
     searchQueryLanguage: 'en-us'
     searchQuerySpeller: 'lexicon'
     searchServiceSemanticRankerLevel: 'free'
